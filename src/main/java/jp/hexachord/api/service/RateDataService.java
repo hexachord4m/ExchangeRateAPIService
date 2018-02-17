@@ -20,9 +20,18 @@ public class RateDataService {
 	public void initAfterStartup() {
 		// TODO: CSVファイル読み込み
 		data = Arrays.asList(
-				new Rate() {{ setDateStr("2018/2/5"); setUsd(new BigDecimal("109.9")); }},
-				new Rate() {{ setDateStr("2018/2/6"); setUsd(new BigDecimal("109.08")); }}
-			);
+				new Rate() {
+					{
+						setDateStr("2018/2/5");
+						setUsd(new BigDecimal("109.9"));
+					}
+				},
+				new Rate() {
+					{
+						setDateStr("2018/2/6");
+						setUsd(new BigDecimal("109.08"));
+					}
+				});
 	}
 
 	public List<Rate> getRateData(Map<String, String> queryParameters) {
