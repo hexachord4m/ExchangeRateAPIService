@@ -25,4 +25,9 @@ public class Rate {
 		this.month = Integer.valueOf(date[1]);
 		this.day = Integer.valueOf(date[2]);
 	}
+
+	//	@JsonIgnore
+	//	public String getYearMonthStr() {
+	//		return String.format("%d%02d", year, month);
+	//	}
 }

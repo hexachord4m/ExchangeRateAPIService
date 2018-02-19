@@ -53,7 +53,7 @@ public class RateDataService {
 						setUsd(new BigDecimal(r[1]));
 					}
 				})
-				//				.filter(r -> r.getDateStr().equals("2018/2/7")) //TODO:
+				.filter(r -> r.getDateStr().equals("2018/2/7")) //TODO:
 				.collect(Collectors.toList());
 	}
 }
