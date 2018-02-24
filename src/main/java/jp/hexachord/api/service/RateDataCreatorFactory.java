@@ -5,12 +5,12 @@ import jp.hexachord.api.def.CalcType;
 public class RateDataCreatorFactory {
 	public static IRateDataCreator GetRateDataCreator(CalcType calcType) {
 		switch (calcType) {
-		case Sum:
+		case SUM:
 			return null; //TODO
-		case Avg:
+		case AVG:
 			return new AverageRateDataCreator();
-		case Max:
-		case Min:
+		case MAX:
+		case MIN:
 			return null; //TODO
 		default:
 			return new DetailRateDataCreator();

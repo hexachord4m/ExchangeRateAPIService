@@ -8,9 +8,11 @@ import lombok.Data;
 
 @Data
 public class Rate {
-	private String dateStr;
+	private String date;
 	private BigDecimal usd;
 
+	@JsonIgnore
+	private int dateNum;
 	@JsonIgnore
 	private int year;
 	@JsonIgnore
@@ -18,12 +20,13 @@ public class Rate {
 	@JsonIgnore
 	private int day;
 
-	public void setDateStr(String dateStr) {
-		this.dateStr = dateStr;
-		String[] date = dateStr.split("/");
-		this.year = Integer.valueOf(date[0]);
-		this.month = Integer.valueOf(date[1]);
-		this.day = Integer.valueOf(date[2]);
+	public void setDateOrg(String date) {
+		this.date = date;
+		String[] dateAry = date.split("/");
+		this.year = Integer.valueOf(dateAry[0]);
+		this.month = Integer.valueOf(dateAry[1]);
+		this.day = Integer.valueOf(dateAry[2]);
+		this.dateNum = Integer.parseInt(String.format("%d%02d%02d", this.year, this.month, this.day));
 	}
 
 	//	@JsonIgnore

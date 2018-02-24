@@ -3,11 +3,9 @@ package jp.hexachord.api.service;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -16,6 +14,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
+import jp.hexachord.api.def.CalcType;
 import jp.hexachord.api.dto.Rate;
 
 @Component
@@ -45,15 +44,8 @@ public class RateDataService {
 	}
 
 	public List<Rate> getRateData(Map<String, String> queryParameters) {
-		return csvdata.stream()
-				.skip(3) // 先頭3行のヘッダーをスキップ
-				.map(r -> new Rate() {
-					{
-						setDateStr(r[0]);
-						setUsd(new BigDecimal(r[1]));
-					}
-				})
-				.filter(r -> r.getDateStr().equals("2018/2/7")) //TODO:
-				.collect(Collectors.toList());
+		CalcType calcType = CalcType.getCalcType(queryParameters.get("calc"));
+		IRateDataCreator rateDataCreator = RateDataCreatorFactory.GetRateDataCreator(calcType);
+		return rateDataCreator.getRateData(csvdata, queryParameters);
 	}
 }
