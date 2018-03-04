@@ -21,6 +21,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
+import jp.hexachord.api.RateApiConfiguration;
 import jp.hexachord.api.def.CalcType;
 import jp.hexachord.api.dto.Rate;
 
@@ -29,6 +30,8 @@ public class RateDataService {
 
 	@Autowired
 	private ResourceLoader resourceLoader;
+	@Autowired
+	private RateApiConfiguration rateApiConfiguration;
 
 	private static final String csvFilePath = "data/market_quote.csv";
 	private static final String csvFileUrl = "https://www.mizuhobank.co.jp/rate/market/csv/quote.csv";
@@ -37,7 +40,9 @@ public class RateDataService {
 	@PostConstruct
 	public void initAfterStartup() {
 		// CSVファイルダウンロード
-		downloadCsvFile();
+		if (rateApiConfiguration.isDownloadAtStartup()) {
+			downloadCsvFile();
+		}
 
 		// CSVファイル読み込み
 		Resource resource = resourceLoader.getResource("classpath:" + csvFilePath);
@@ -72,7 +77,7 @@ public class RateDataService {
 			conn.connect();
 
 			int statusCode = conn.getResponseCode();
-			if(statusCode != HttpURLConnection.HTTP_OK) {
+			if (statusCode != HttpURLConnection.HTTP_OK) {
 				throw new Exception("statusCode is " + statusCode);
 			}
 
@@ -82,23 +87,23 @@ public class RateDataService {
 
 			byte[] b = new byte[4096];
 			int readByte = 0;
-			while(-1 != (readByte = dataInStream.read(b))){
+			while (-1 != (readByte = dataInStream.read(b))) {
 				dataOutStream.write(b, 0, readByte);
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				if(dataInStream != null) {
+				if (dataInStream != null) {
 					dataInStream.close();
 				}
-				if(dataOutStream != null) {
+				if (dataOutStream != null) {
 					dataOutStream.close();
 				}
-				if(conn != null) {
+				if (conn != null) {
 					conn.disconnect();
 				}
-			} catch(IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
