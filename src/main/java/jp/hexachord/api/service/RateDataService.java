@@ -22,7 +22,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import jp.hexachord.api.RateApiConfiguration;
-import jp.hexachord.api.def.CalcType;
 import jp.hexachord.api.dto.Rate;
 
 @Component
@@ -60,9 +59,8 @@ public class RateDataService {
 	}
 
 	public List<Rate> getRateData(Map<String, String> queryParameters) {
-		CalcType calcType = CalcType.getCalcType(queryParameters.get("calc"));
-		IRateDataCreator rateDataCreator = RateDataCreatorFactory.GetRateDataCreator(calcType);
-		return rateDataCreator.getRateData(csvdata, queryParameters);
+		AbstractRateDataCreator rateDataCreator = RateDataCreatorFactory.GetRateDataCreator(csvdata, queryParameters);
+		return rateDataCreator.getRateData();
 	}
 
 	public void downloadCsvFile() {
